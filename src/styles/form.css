@@ -1,0 +1,19 @@
+form {
+  max-width: 500px;
+  background: white;
+  padding: 3rem;
+  width: 100%;
+}
+
+form button {
+  width: 100%;
+  border: none;
+  background: rgb(7, 114, 133);
+  cursor: pointer;
+  color: white;
+  height: 50px;
+}
+
+form button:hover {
+  background-color: lightseagreen;
+}
