@@ -1,0 +1,20 @@
+{
+  "name": "stripe-elements",
+  "version": "1.0.0",
+  "description": "A payment portal using Stripe Elements",
+  "main": "index.js",
+  "scripts": {
+    "dev": "parcel index.html -p 5000 --open"
+  },
+  "author": "Erik Lorenz",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^13.1.7",
+    "eslint": "^6.8.0",
+    "parcel-bundler": "^1.12.4",
+    "typescript": "^3.7.5"
+  },
+  "dependencies": {
+    "sanitize.css": "^11.0.0"
+  }
+}
