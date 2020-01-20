@@ -1,0 +1,9 @@
+body {
+  --theme-color-1: #323234;
+  --theme-color-2: #373737;
+  --text-color-1: #f5f5f5;
+  --text-color-invalid: rgb(221, 65, 112);
+  --button-color: #9b65cc;
+  --placeholder-color: #636262;
+  --border-bottom-color: #848181;
+}

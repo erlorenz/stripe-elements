@@ -117,35 +117,149 @@ parcelRequire = (function (modules, cache, entry, globalName) {
   }
 
   return newRequire;
-})({"src/index.ts":[function(require,module,exports) {
-"use strict"; //@ts-ignore
+})({"src/utils/getCssVariables.ts":[function(require,module,exports) {
+"use strict";
 
-var stripe = Stripe('pk_test_Ee9UhcHHJ4wwWXtjwnLMKmU300NEwIXvWS');
-var elements = stripe.elements();
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var body = document.querySelector('body');
+exports.textColor = getComputedStyle(body).getPropertyValue('--text-color-1');
+exports.placeholderColor = getComputedStyle(body).getPropertyValue('--placeholder-color');
+exports.invalidColor = getComputedStyle(body).getPropertyValue('--text-color-invalid');
+},{}],"src/utils/stripeStyles.ts":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var getCssVariables_1 = require("./getCssVariables");
+
 var style = {
   base: {
-    iconColor: '#c4f0ff',
-    color: '#000',
-    fontWeight: 500,
-    fontFamily: 'Roboto, Open Sans, Segoe UI, sans-serif',
+    iconColor: 'gray',
+    color: getCssVariables_1.textColor,
+    fontWeight: 600,
+    fontFamily: 'Open Sans',
     fontSize: '16px',
     fontSmoothing: 'antialiased',
     ':-webkit-autofill': {
       color: '#fce883'
     },
     '::placeholder': {
-      color: '#87BBFD'
+      fontFamily: 'Open Sans',
+      fontSize: '18px',
+      color: getCssVariables_1.placeholderColor
     }
   },
   invalid: {
-    iconColor: '#FFC7EE',
-    color: '#FFC7EE'
+    iconColor: getCssVariables_1.invalidColor,
+    color: getCssVariables_1.invalidColor
   }
 };
-var card = elements.create('card', {
-  style: style
+exports.default = style;
+},{"./getCssVariables":"src/utils/getCssVariables.ts"}],"src/utils/hasError.ts":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+}); // Get the Error
+
+var hasError = function hasError(field) {
+  // Don't validate submits, buttons, file and reset inputs, and disabled fields
+  if (field.disabled || field.type === 'file' || field.type === 'reset' || field.type === 'submit' || field.type === 'button') return; // Get validity
+
+  var validity = field.validity; // Get field name
+
+  var displayName = field.dataset.displayname; // If valid, return null
+
+  console.log(validity);
+  if (validity.valid) return null; // If field is required and empty
+
+  if (validity.tooShort || validity.typeMismatch) return "Please enter a valid " + displayName + "."; // If not the right type
+
+  if (validity.valueMissing) return "Please enter a " + displayName + "."; // If too long
+
+  if (validity.tooLong) return 'Please shorten this text.'; // If number input isn't a number
+
+  if (validity.badInput) return 'Please enter a number.'; // If a number value doesn't match the step interval
+
+  if (validity.stepMismatch) return 'Please select a valid value.'; // If a number field is over the max
+
+  if (validity.rangeOverflow) return 'This card amount is too high. Please contact us for instructions.'; // If a number field is below the min
+
+  if (validity.rangeUnderflow) return 'Please select a larger value.'; // If pattern doesn't match
+
+  if (validity.patternMismatch) return 'Please match the requested format.'; // If all else fails, return a generic catchall error
+
+  return 'The value you entered for this field is invalid.';
+};
+
+exports.default = hasError;
+},{}],"src/utils/showError.ts":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
 });
-card.mount('#card-element');
+
+var showError = function showError(element, error) {
+  var _a, _b, _c, _d;
+
+  element.classList.add('error');
+  var id = element.id; // Check if error message field already exists
+  // If not, create one
+
+  var message = (_b = (_a = element) === null || _a === void 0 ? void 0 : _a.form) === null || _b === void 0 ? void 0 : _b.querySelector('.error-message#error-for-' + id);
+
+  if (!message) {
+    message = document.createElement('p');
+    message.className = 'error-message';
+    message.id = 'error-for-' + id;
+    (_d = (_c = element) === null || _c === void 0 ? void 0 : _c.parentNode) === null || _d === void 0 ? void 0 : _d.insertBefore(message, element.nextSibling);
+  } // Update error message
+
+
+  message.innerHTML = error; // Show error message
+
+  message.style.display = 'block';
+  message.style.visibility = 'visible';
+};
+
+exports.default = showError;
+},{}],"src/index.ts":[function(require,module,exports) {
+"use strict";
+
+var __importDefault = this && this.__importDefault || function (mod) {
+  return mod && mod.__esModule ? mod : {
+    "default": mod
+  };
+};
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var stripeStyles_1 = __importDefault(require("./utils/stripeStyles"));
+
+var hasError_1 = __importDefault(require("./utils/hasError"));
+
+var showError_1 = __importDefault(require("./utils/showError")); //Create and Mount Stripe
+//@ts-ignore
+
+
+var stripe = Stripe('pk_test_Ee9UhcHHJ4wwWXtjwnLMKmU300NEwIXvWS');
+var elements = stripe.elements({
+  fonts: [{
+    cssSrc: 'https://fonts.googleapis.com/css?family=Open+Sans'
+  }]
+});
+var card = elements.create('card', {
+  style: stripeStyles_1.default
+});
+card.mount('#card-element'); // Validate Errors on Stripe Elemnent
+
 card.addEventListener('change', function (_a) {
   var error = _a.error;
   var displayError = document.getElementById('card-errors');
@@ -155,8 +269,18 @@ card.addEventListener('change', function (_a) {
   } else {
     displayError.textContent = '';
   }
-});
-},{}],"node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+}); // Validate Other Errors
+
+document.addEventListener('blur', function (event) {
+  // Only run if the field is in a form to be validated
+  var element = event.target;
+  if (!element.classList.contains('validate')) return; // Validate the field
+
+  var errorMessage = hasError_1.default(element); // If there's an error, show it
+
+  if (errorMessage) showError_1.default(element, errorMessage);
+}, true);
+},{"./utils/stripeStyles":"src/utils/stripeStyles.ts","./utils/hasError":"src/utils/hasError.ts","./utils/showError":"src/utils/showError.ts"}],"node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -184,7 +308,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "62043" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "51391" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
