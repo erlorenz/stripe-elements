@@ -1,6 +1,7 @@
 import style from './utils/stripeStyles';
 import hasError from './utils/hasError';
 import showError from './utils/showError';
+import removeError from './utils/removeError';
 
 //Create and Mount Stripe
 //@ts-ignore
@@ -37,7 +38,13 @@ document.addEventListener(
     const errorMessage = hasError(element);
 
     // If there's an error, show it
-    if (errorMessage) showError(element, errorMessage);
+    if (errorMessage) {
+      showError(element, errorMessage);
+      return;
+    }
+
+    // Otherwise, remove any existing error message
+    removeError(element);
   },
   true
 );

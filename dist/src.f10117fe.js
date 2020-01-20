@@ -228,6 +228,25 @@ var showError = function showError(element, error) {
 };
 
 exports.default = showError;
+},{}],"src/utils/removeError.ts":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var removeError = function removeError(element) {
+  // Remove error from input element
+  element.classList.remove('error'); // See if there is an error message currently
+
+  var errorMessage = document.querySelector('.error-message#error-for-' + element.id);
+  if (!errorMessage) return; // Hide it
+
+  errorMessage.innerHTML = '';
+  errorMessage.style.display = 'none';
+};
+
+exports.default = removeError;
 },{}],"src/index.ts":[function(require,module,exports) {
 "use strict";
 
@@ -245,7 +264,9 @@ var stripeStyles_1 = __importDefault(require("./utils/stripeStyles"));
 
 var hasError_1 = __importDefault(require("./utils/hasError"));
 
-var showError_1 = __importDefault(require("./utils/showError")); //Create and Mount Stripe
+var showError_1 = __importDefault(require("./utils/showError"));
+
+var removeError_1 = __importDefault(require("./utils/removeError")); //Create and Mount Stripe
 //@ts-ignore
 
 
@@ -278,9 +299,15 @@ document.addEventListener('blur', function (event) {
 
   var errorMessage = hasError_1.default(element); // If there's an error, show it
 
-  if (errorMessage) showError_1.default(element, errorMessage);
+  if (errorMessage) {
+    showError_1.default(element, errorMessage);
+    return;
+  } // Otherwise, remove any existing error message
+
+
+  removeError_1.default(element);
 }, true);
-},{"./utils/stripeStyles":"src/utils/stripeStyles.ts","./utils/hasError":"src/utils/hasError.ts","./utils/showError":"src/utils/showError.ts"}],"node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"./utils/stripeStyles":"src/utils/stripeStyles.ts","./utils/hasError":"src/utils/hasError.ts","./utils/showError":"src/utils/showError.ts","./utils/removeError":"src/utils/removeError.ts"}],"node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -308,7 +335,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "51391" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "54605" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
