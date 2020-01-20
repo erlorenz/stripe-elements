@@ -11,18 +11,18 @@
   <script src="/styles.c9b106b8.js"></script></head>
   <body>
     <div class="container">
-      <form>
+      <form id="payment-form">
         <fieldset>
-          <input id="company-name" placeholder="Company Name" novalidate="true" type="text" minlength="3" class="validate" data-displayname="company name" required="true">
+          <input id="company-name" placeholder="Company Name" novalidate="" type="text" minlength="3" class="validate" data-displayname="company name" required="true">
         </fieldset>
         <fieldset>
-          <input id="email" type="email" placeholder="Email" novalidate="true" class="validate" required="true" data-displayname="email">
+          <input id="email" type="email" placeholder="Email" novalidate="" class="validate" required="true" data-displayname="email">
         </fieldset>
         <fieldset>
-          <input id="invoice-number" placeholder="Invoice Number(s)" novalidate="true" type="text" min="3" class="validate" required="true" data-displayname="invoice number">
+          <input id="invoice-number" placeholder="Invoice Number(s)" novalidate="" type="text" min="3" class="validate" required="true" data-displayname="invoice number">
         </fieldset>
         <fieldset>
-          <input id="amount" placeholder="Amount" novalidate="true" class="validate" type="number" step=".01" max="50000" required="true" data-displayname="amount">
+          <input id="amount" placeholder="Amount" novalidate="" class="validate" type="number" step=".01" max="50000" required="true" data-displayname="amount">
         </fieldset>
         <fieldset>
           <div id="card-element">
@@ -33,7 +33,7 @@
           <p id="card-errors" role="alert" class="error-message"></p>
         </fieldset>
 
-        <button class="button" id="submit">Pay</button>
+        <button formnovalidate="" class="button" id="submit">Pay</button>
       </form>
     </div>
     <script src="/src.f10117fe.js"></script>

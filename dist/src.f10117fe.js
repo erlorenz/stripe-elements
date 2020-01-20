@@ -224,7 +224,10 @@ var showError = function showError(element, error) {
   message.innerHTML = error; // Show error message
 
   message.style.display = 'block';
-  message.style.visibility = 'visible';
+  message.style.visibility = 'visible'; // Disable submit
+
+  var button = document.querySelector('#submit');
+  button.disabled = true;
 };
 
 exports.default = showError;
@@ -243,7 +246,10 @@ var removeError = function removeError(element) {
   if (!errorMessage) return; // Hide it
 
   errorMessage.innerHTML = '';
-  errorMessage.style.display = 'none';
+  errorMessage.style.display = 'none'; // Enable submit
+
+  var button = document.querySelector('#submit');
+  button.disabled = false;
 };
 
 exports.default = removeError;
@@ -266,7 +272,7 @@ var hasError_1 = __importDefault(require("./utils/hasError"));
 
 var showError_1 = __importDefault(require("./utils/showError"));
 
-var removeError_1 = __importDefault(require("./utils/removeError")); //Create and Mount Stripe
+var removeError_1 = __importDefault(require("./utils/removeError")); // Create and Mount Stripe
 //@ts-ignore
 
 
@@ -284,11 +290,14 @@ card.mount('#card-element'); // Validate Errors on Stripe Elemnent
 card.addEventListener('change', function (_a) {
   var error = _a.error;
   var displayError = document.getElementById('card-errors');
+  var button = document.querySelector('#submit');
 
   if (error) {
     displayError.textContent = error.message;
+    button.disabled = true;
   } else {
     displayError.textContent = '';
+    button.disabled = false;
   }
 }); // Validate Other Errors
 
@@ -306,7 +315,13 @@ document.addEventListener('blur', function (event) {
 
 
   removeError_1.default(element);
-}, true);
+}, true); // Submit
+
+var form = document.querySelector('#payment-form');
+form.addEventListener('submit', function (event) {
+  event.preventDefault();
+  console.log('SUBMITTED');
+});
 },{"./utils/stripeStyles":"src/utils/stripeStyles.ts","./utils/hasError":"src/utils/hasError.ts","./utils/showError":"src/utils/showError.ts","./utils/removeError":"src/utils/removeError.ts"}],"node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
@@ -335,7 +350,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "54605" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "55338" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

@@ -3,7 +3,7 @@ import hasError from './utils/hasError';
 import showError from './utils/showError';
 import removeError from './utils/removeError';
 
-//Create and Mount Stripe
+// Create and Mount Stripe
 //@ts-ignore
 const stripe = Stripe('pk_test_Ee9UhcHHJ4wwWXtjwnLMKmU300NEwIXvWS');
 const elements = stripe.elements({
@@ -19,10 +19,14 @@ card.mount('#card-element');
 // Validate Errors on Stripe Elemnent
 card.addEventListener('change', ({ error }: any) => {
   const displayError = document.getElementById('card-errors') as HTMLElement;
+  const button = document.querySelector('#submit') as HTMLButtonElement;
+
   if (error) {
     displayError.textContent = error.message;
+    button.disabled = true;
   } else {
     displayError.textContent = '';
+    button.disabled = false;
   }
 });
 
@@ -48,3 +52,10 @@ document.addEventListener(
   },
   true
 );
+
+// Submit
+const form = document.querySelector('#payment-form') as HTMLFormElement;
+form.addEventListener('submit', (event: Event) => {
+  event.preventDefault();
+  console.log('SUBMITTED');
+});

@@ -20,6 +20,10 @@ const showError = (element: HTMLInputElement, error: string) => {
   // Show error message
   message.style.display = 'block';
   message.style.visibility = 'visible';
+
+  // Disable submit
+  const button = document.querySelector('#submit') as HTMLButtonElement;
+  button.disabled = true;
 };
 
 export default showError;

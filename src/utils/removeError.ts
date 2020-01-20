@@ -11,6 +11,10 @@ const removeError = (element: HTMLInputElement) => {
   // Hide it
   errorMessage.innerHTML = '';
   errorMessage.style.display = 'none';
+
+  // Enable submit
+  const button = document.querySelector('#submit') as HTMLButtonElement;
+  button.disabled = false;
 };
 
 export default removeError;

@@ -14,12 +14,12 @@
   </head>
   <body>
     <div class="container">
-      <form>
+      <form id="payment-form">
         <fieldset>
           <input
             id="company-name"
             placeholder="Company Name"
-            novalidate="true"
+            novalidate
             type="text"
             minlength="3"
             class="validate"
@@ -32,7 +32,7 @@
             id="email"
             type="email"
             placeholder="Email"
-            novalidate="true"
+            novalidate
             class="validate"
             required="true"
             data-displayname="email"
@@ -42,7 +42,7 @@
           <input
             id="invoice-number"
             placeholder="Invoice Number(s)"
-            novalidate="true"
+            novalidate
             type="text"
             min="3"
             class="validate"
@@ -54,7 +54,7 @@
           <input
             id="amount"
             placeholder="Amount"
-            novalidate="true"
+            novalidate
             class="validate"
             type="number"
             step=".01"
@@ -72,7 +72,7 @@
           <p id="card-errors" role="alert" class="error-message"></p>
         </fieldset>
 
-        <button class="button" id="submit">Pay</button>
+        <button formnovalidate class="button" id="submit">Pay</button>
       </form>
     </div>
     <script src="./src/index.ts"></script>
