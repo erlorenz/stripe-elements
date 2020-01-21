@@ -17,7 +17,6 @@ const hasError = (field: HTMLInputElement) => {
   const displayName = field.dataset.displayname;
 
   // If valid, return null
-  console.log(validity);
   if (validity.valid) return null;
 
   // If field is required and empty

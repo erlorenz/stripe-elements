@@ -583,7 +583,8 @@ body {
 .container {
   display: flex;
   justify-content: center;
-  padding-top: 15%;
+  align-items: center;
+  min-height: 100vh;
 }
 
 form {
@@ -661,6 +662,14 @@ input:focus {
 
 input.error {
   color: var(--text-color-invalid);
+}
+
+/* Change Autocomplete styles in Chrome*/
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus {
+  transition: background-color 5000s ease-in-out 0s;
+  -webkit-text-fill-color: var(--text-color-1);
 }
 
 

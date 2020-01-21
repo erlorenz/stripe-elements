@@ -5,7 +5,7 @@ import removeError from './utils/removeError';
 
 // Create and Mount Stripe
 //@ts-ignore
-const stripe = Stripe('pk_test_Ee9UhcHHJ4wwWXtjwnLMKmU300NEwIXvWS');
+const stripe = Stripe(process.env.STRIPE_PUBLIC_KEY);
 const elements = stripe.elements({
   fonts: [
     {
@@ -55,7 +55,65 @@ document.addEventListener(
 
 // Submit
 const form = document.querySelector('#payment-form') as HTMLFormElement;
-form.addEventListener('submit', (event: Event) => {
+
+form.addEventListener('submit', async event => {
   event.preventDefault();
-  console.log('SUBMITTED');
+  const errors: string[] = [];
+  const rawValues: any = {};
+
+  const fields = form.querySelectorAll('.validate') as NodeListOf<
+    HTMLInputElement
+  >;
+
+  fields.forEach(field => {
+    // Validate the field
+    const errorMessage = hasError(field);
+
+    // If there's an error, show it and add to array
+    if (errorMessage) {
+      errors.push(errorMessage);
+      showError(field, errorMessage);
+      return;
+    }
+    // Otherwise, remove any existing error message
+    removeError(field);
+    rawValues[field.id] = field.value;
+  });
+
+  console.log(errors);
+  console.log(rawValues);
+  if (errors.length) return;
+
+  const values = {
+    amount: rawValues.amount,
+    companyName: rawValues['company-name'],
+    email: rawValues.email,
+    invoiceNumber: rawValues['invoice-number'],
+    description: `${rawValues['company-name']} - Invoice(s) ${rawValues['invoice-number']}`
+  };
+
+  console.log(values);
+
+  // Submit to server and get the client secret
+  const response = await fetch(
+    'http://localhost:3000/customerpayment/paymentintent',
+    {
+      method: 'POST', // or 'PUT'
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ amount: values.amount * 100 })
+      //body: values -------- Add all values for metadata
+    }
+  );
+  const json: any = await response.json();
+  const secret = await json.intent.client_secret;
+
+  const finalResponse = await stripe.confirmCardPayment(secret, {
+    payment_method: {
+      card
+    }
+  });
+
+  console.log('Final:', finalResponse);
 });
